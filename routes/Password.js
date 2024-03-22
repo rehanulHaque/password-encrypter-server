@@ -69,7 +69,20 @@ router.post('/decrypt', auth_1.default, (req, res) => __awaiter(void 0, void 0, 
         res.json({ password: decryptPassword, sucess: true });
     }
     catch (error) {
-        res.send(error.message);
+        res.json({ message: error.message, sucess: false });
+    }
+}));
+router.post('/delete', auth_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const id = req.user._id;
+        const password = yield Password_1.default.findOneAndDelete({ _id: req.body.id, owner: id });
+        if (!password) {
+            return res.json({ message: "Password not found", sucess: false });
+        }
+        res.json({ message: "Password Deleted Sucessfully", sucess: true });
+    }
+    catch (error) {
+        res.json({ message: error.message, sucess: false });
     }
 }));
 exports.default = router;
